@@ -7,7 +7,7 @@ namespace Core.Services;
 
 public class UserService : IUserService
 {
-    private IUserRepository _userRepository;
+    private readonly IUserRepository _userRepository;
     public UserService(IUserRepository userRepository)
     {
         _userRepository = userRepository;
@@ -26,6 +26,11 @@ public class UserService : IUserService
         if (response == null) throw new NotFoundException();
 
         return response;
+    }
+
+    public User GetByUsername(string username)
+    {
+        return _userRepository.GetByUsername(username);
     }
 
     public void RemoveUser(int id)

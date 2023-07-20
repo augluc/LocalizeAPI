@@ -6,6 +6,7 @@ public interface IUserService
 {
     public User GetbyId(int id);
 
+    public User GetByUsername(string username);
 
     public void AddUser(User user);
 

@@ -1,6 +1,5 @@
 ﻿using Core.Authentication.Interfaces;
-using Core.Entities;
-using Core.Repositories.Interfaces;
+using Core.Exceptions;
 using Core.Services.Interfaces;
 
 namespace Core.Services
@@ -18,19 +17,11 @@ namespace Core.Services
 
         public string Login(string username, string password)
         {
-            if (_userService.GetUserByUsername(username) is not User user)
-            {
-                return Errors.Authentication.InvalidCredentials;
-            }
+            var user = _userService.GetByUsername(username);
 
-            if (user.Password != password)
-            {
-                return new[] { Errors.Authentication.InvalidCredentials };
-            }
+            if (user is null || user.Password != password) throw new InvalidUserCredentialsException();
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
-
-            return new AuthenticationResult(user, token);
+            return _jwtTokenGenerator.GenerateToken(user);
         }
     }
 }

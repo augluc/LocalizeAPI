@@ -20,6 +20,11 @@ public class ErrorMiddleware
             await _next(context);
 
         }
+        catch (InvalidUserCredentialsException ex)
+        {
+            await CreateErrorResponse(context, (int)HttpStatusCode.Unauthorized, "Login Unauthorized", ex.Message);
+
+        }
         catch (NotFoundException ex)
         {
             await CreateErrorResponse(context, (int)HttpStatusCode.NotFound, "Not Found", ex.Message);
@@ -28,12 +33,12 @@ public class ErrorMiddleware
         catch (Exception ex)
         {
             await CreateErrorResponse(context, (int)HttpStatusCode.InternalServerError, "Unexpected Error", ex.Message);
-            
+
         }
 
     }
 
-    public async Task CreateErrorResponse(HttpContext context ,int statusCode, string title, string detail)
+    public async Task CreateErrorResponse(HttpContext context, int statusCode, string title, string detail)
     {
         context.Response.StatusCode = statusCode;
 

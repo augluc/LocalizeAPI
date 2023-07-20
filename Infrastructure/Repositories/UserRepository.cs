@@ -31,6 +31,17 @@ namespace Infrastructure.Repositories
             return user;
         }
 
+        public User GetByUsername(string username)
+        {
+            var userDb = _context.Users.Where(user => user.Username == username).FirstOrDefault();
+
+            if (userDb == null) return null;
+
+            User user = new(userDb.Username, userDb.Password, userDb.Email);
+
+            return user;
+        }
+
         public void RemoveUser(int id)
         {
             var userDb = _context.Users.Where(user => user.Id == id).FirstOrDefault();

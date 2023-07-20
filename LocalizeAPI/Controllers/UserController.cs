@@ -60,8 +60,8 @@ public class UserController : ControllerBase
     [Route("login")]
     public IActionResult Login(LoginDTO loginDTO)
     {
-        var authResult = _authenticationService.Login(
-            request.Username,
-            request.Password);
+        var token = _authenticationService.Login(loginDTO.Username, loginDTO.Password);
+
+        return Ok(token);
     }
 }
